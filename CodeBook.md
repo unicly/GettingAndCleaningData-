@@ -4,12 +4,13 @@ This is the codebook of the programming assignment of the course "Getting and Cl
 All the steps are explained in detail below.
 
 #### Loading the required libraries.
-```python
+```Rscript
 library(dplyr)
 ```
 
 #### Downloading the data.
-```python
+Before executing the script, please set the the working directory that you are working with.
+```Rscript
 setwd(
     ".../3-Data_gathering_and_cleaning/Assignment/"
 )
@@ -48,7 +49,7 @@ features.txt - Names of column variables in the dataTable
 activity_labels.txt - Links the class labels with their activity name.
 
 #### Setting the variables and assigning all data frames
-```python
+```Rscript
 # Spaces on Mac nees a backslash \
 test.x <- "UCI\ HAR\ Dataset/test/X_test.txt"
 test.y <- "UCI\ HAR\ Dataset/test/y_test.txt"
@@ -100,7 +101,7 @@ contains recorded features train data
 contains train data of activities???code labels
 
 #### Step 1. Merges the training and the test sets and creates one single data set.
-```python
+```Rscript
 df.test <- cbind(df.test.subject, df.test.y, df.test.x)
 df.train <- cbind(df.train.subject, df.train.y, df.train.x)
 df.merged <- rbind(df.test, df.train)
@@ -108,19 +109,19 @@ df.merged <- rbind(df.test, df.train)
 
 #### Step 2. Extracts only the measurements on the mean and standard deviation for each measurement.
 The extracted data frame contains 4 columns: subject, activity_code, mean, std
-```python
+```Rscript
 df.extracted <- df.merged %>% select(subject, activity_code, contains("mean"), contains("std"))
 ```
 
 #### Step 3. Uses descriptive activity names to name the activities in the data set
 The data set imports the names from the file activity_labels.txt
-```python
+```Rscript
 df.extracted$activity_code <- df.activity.labels[df.extracted$activity_code, 2]
 ```
 
 #### Step 4. Appropriately labels the data set with descriptive variable names.
 Descriptive variable names makes it easier to read the variable names.
-```python
+```Rscript
 names(df.extracted)[1] = "Subject"
 names(df.extracted)[2] = "Activity"
 names(df.extracted)<-gsub("Acc", "Accelerometer", names(df.extracted))
@@ -142,7 +143,7 @@ names(df.extracted)<-gsub("gravitMean", "GravityMean", names(df.extracted))
 ```
 
 #### Step 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-```python
+```Rscript
 df.tidy <- df.extracted %>% 
     group_by(Subject, Activity) %>% 
     summarise_all(funs(mean))
